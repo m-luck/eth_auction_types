@@ -11,10 +11,14 @@ contract EnglishAuction is Auction {
     uint currentTime;
     uint startTime;
     uint formerHighestBid;
+    uint oldBalance;
     Timer timer;
     address contractAddress;
     address formerHighestBidder;
-    bool sealed;
+    mapping(address=>uint) priorBids;
+
+    event printStr(string str);
+    event print(uint256 value);
 
     // constructor
     constructor(address _sellerAddress,
@@ -40,10 +44,6 @@ contract EnglishAuction is Auction {
       _;
     }
 
-    modifier onlyIfNotSealed() {
-      require( sealed == false, "Out of auction time window.");
-      _;
-    }
 
     function getTime() internal view returns (uint time) {
       return timer.getTime();
@@ -51,8 +51,13 @@ contract EnglishAuction is Auction {
 
     function bid() public payable onlyInTimePeriod() {
         // TODO: place your code here
+        emit printStr("Bid");
+        emit print( contractAddress.balance - oldBalance);
+        emit printStr("should be higher than");
+        emit printStr("former bid");
+        emit print(formerHighestBid);
 
-        if (contractAddress.balance < 2*formerHighestBid  + minimumPriceIncrement) {
+        if (formerHighestBid + minimumPriceIncrement > contractAddress.balance - oldBalance) {
           revert("This bid is not high enough");
         }
 
@@ -60,18 +65,24 @@ contract EnglishAuction is Auction {
           revert("This bid is not high enough");
         }
 
-        formerHighestBidder.transfer(formerHighestBid);
+        priorBids[formerHighestBidder] += formerHighestBid;
         formerHighestBidder = msg.sender;
-        formerHighestBid = contractAddress.balance;
+        formerHighestBid = contractAddress.balance - oldBalance;
         startTime = getTime();
+        oldBalance = contractAddress.balance;
     }
 
     // Need to override the default implementation
-    function getWinner() public view returns (address winner){
+    function getWinner() public view returns (address highestBidder){
       // TODO: place your code here
-        if (startTime + biddingPeriod < timer.getTime()) {
+        if (startTime + biddingPeriod > timer.getTime()) {
           return 0;
         }
         else { return formerHighestBidder; }
+    }
+
+    function withdraw() public {
+      msg.sender.transfer(priorBids[msg.sender]);
+      priorBids[msg.sender] = 0;
     }
 }

@@ -28,7 +28,7 @@ contract EnglishAuctionTest {
     }
 
     function makeBid(EnglishAuctionBidder bidder,
-                     uint bidValue, 
+                     uint bidValue,
                      uint bidTime,
                      bool expectedResult,
                      string message) internal {
@@ -119,11 +119,11 @@ contract EnglishAuctionTest {
     function testExtendedBidding() public {
         setupContracts();
         makeBid(alice, 300, 0, true, "valid bid should be accepted");
-        makeBid(bob, 310, 4, false, "invalid bid should be rejected");
+        makeBid(bob, 310, 4, false, "invalid bid should be rejected1");
         makeBid(carol, 400, 8, true, "valid bid should be accepted");
         makeBid(bob, 450, 12, true, "valid bid should be accepted");
         makeBid(alice, 650, 15, true, "valid bid should be accepted");
-        makeBid(bob, 660, 16, false, "invalid bid should be rejected");
+        makeBid(bob, 660, 16, false, "invalid bid should be rejected2");
         makeBid(alice, 750, 20, true, "valid bid should be accepted");
         makeBid(carol, 1337, 29, true, "valid bid should be accepted");
         t.setTime(38);
