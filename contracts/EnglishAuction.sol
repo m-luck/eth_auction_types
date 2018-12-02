@@ -32,6 +32,7 @@ contract EnglishAuction is Auction {
         initialPrice = _initialPrice;
         biddingPeriod = _biddingPeriod;
         minimumPriceIncrement = _minimumPriceIncrement;
+        
         // TODO: place your code here
         timer = Timer(_timerAddress);
         startTime = timer.getTime();
@@ -57,7 +58,7 @@ contract EnglishAuction is Auction {
         emit printStr("former bid");
         emit print(formerHighestBid);
 
-        if (formerHighestBid + minimumPriceIncrement > contractAddress.balance - oldBalance) {
+        if (formerHighestBid + minimumPriceIncrement > contractAddress.balance - oldBalance) { // Compare old balance to new (difference is the new bet.)
           revert("This bid is not high enough");
         }
 

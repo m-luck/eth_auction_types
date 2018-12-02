@@ -80,7 +80,7 @@ contract Auction {
 
     // If no judge is specified, anybody can call this.
     // If a judge is specified, then only the judge or winning bidder may call.
-    function finalize() public onlyIfExistsWinner() {
+    function finalize() public {
         if (judgeAddress == 0) {
           finalized = true;
           withdraw();

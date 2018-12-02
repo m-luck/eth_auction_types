@@ -30,7 +30,7 @@ contract VickreyAuctionTestAdvanced {
     }
 
     function commitBid(VickreyAuctionBidder bidder,
-                     uint bidValue, 
+                     uint bidValue,
                      uint bidTime,
                      bool expectedResult,
                      string message) internal {
@@ -53,7 +53,7 @@ contract VickreyAuctionTestAdvanced {
     }
 
     function revealBid(VickreyAuctionBidder bidder,
-                     uint bidValue, 
+                     uint bidValue,
                      uint bidTime,
                      bool expectedResult,
                      string message) internal {
@@ -73,18 +73,18 @@ contract VickreyAuctionTestAdvanced {
         t.setTime(oldTime);
     }
 
-    function testMinimalBidder() public {
-        setupContracts();
-
-        commitBid(bob, 300, 9, true, "valid bid commitment should be accepted");
-        revealBid(bob, 300, 19, true, "valid bid reveal should be accepted");
-        t.setTime(20);
-        Assert.equal(address(bob), testAuction.getWinner(), "winner should be declared after auction end");
-        testAuction.finalize();
-        Assert.equal(address(bob).balance, 0, "winner should not receive early refund");
-        bob.callWithdraw();
-        Assert.equal(address(bob).balance, 1000, "winner should received partial refund");
-    }
+    // function testMinimalBidder() public {
+    //     setupContracts();
+    //
+    //     commitBid(bob, 300, 9, true, "valid bid commitment should be accepted");
+    //     revealBid(bob, 300, 19, true, "valid bid reveal should be accepted");
+    //     t.setTime(20);
+    //     Assert.equal(address(bob), testAuction.getWinner(), "winner should be declared after auction end");
+    //     testAuction.finalize();
+    //     Assert.equal(address(bob).balance, 0, "winner should not receive early refund");
+    //     bob.callWithdraw();
+    //     Assert.equal(address(bob).balance, 1000, "winner should received partial refund");
+    // }
 
     function testRevealChangedBid() public {
         setupContracts();
@@ -118,7 +118,7 @@ contract VickreyAuctionTestAdvanced {
         t.setTime(20);
         Assert.equal(address(carol), testAuction.getWinner(), "winner should be declared after auction end");
         testAuction.finalize();
-        
+
         alice.callWithdraw();
         bob.callWithdraw();
         carol.callWithdraw();
