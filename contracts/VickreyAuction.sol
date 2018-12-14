@@ -16,8 +16,8 @@ contract VickreyAuction is Auction {
 		bytes32 bid_bytes;
     uint secondHighestBid;
 		bytes32 supposedHash;
-    mapping(address=>bytes32) commitments;
-    mapping(address=>uint) bids;
+    mapping(address=>bytes32) memory commitments;
+    mapping(address=>uint) memory bids;
 
     event print(bytes32 b3 );
     event printInt(uint u);
@@ -137,7 +137,6 @@ contract VickreyAuction is Auction {
         emit printInt(secondHighestBid);
 
         bids[highestBidderThusFar] = highestBidThusFar - secondHighestBid;
-        // call the general finalize() logic
     }
 
     function withdraw() public {
